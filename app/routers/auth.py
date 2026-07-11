@@ -1,6 +1,6 @@
 from fastapi import Depends, APIRouter, HTTPException
 from app.schemas.auth import RegisterRequest, LoginRequest
-from app.services.auth_service import registered_user, login_user
+from app.services.auth_service import register_user, login_user
 from app.dependencies.auth import get_current_user
 from fastapi.security import OAuth2PasswordRequestForm
 
@@ -18,7 +18,7 @@ async def register(
     db: Session = Depends(get_db)
     ):
 
-    user = registered_user(db, request)
+    user = register_user(db, request)
 
     if user is None:
         raise HTTPException(

@@ -25,7 +25,7 @@ def create_access_token(data: dict):
     )
 
 
-def registered_user(db:Session, request : RegisterRequest):
+def register_user(db:Session, request : RegisterRequest):
     existing_user = (
          db.query(User).filter(User.email == request.email)
          .first()

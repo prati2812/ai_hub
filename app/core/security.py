@@ -2,10 +2,14 @@ from pwdlib import PasswordHash
 
 password_hash = PasswordHash.recommended()
 
-hashed_password = password_hash.hash("my_password")
+def hash_password(password: str) -> str:
+    return password_hash.hash(password)
 
-print("hasss", hashed_password)
-
-is_verified = password_hash.verify("my_password" , hashed_password);
-
-print("Verified", is_verified)
+def verify_password(
+        plain_password: str,
+        hashed_password: str
+) -> bool:
+     return password_hash.verify(
+          plain_password,
+          hashed_password 
+     )

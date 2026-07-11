@@ -5,6 +5,8 @@ from app.core.config import settings
 from app.schemas.auth import RegisterRequest, LoginRequest
 from app.dependencies.database import get_db
 from app.models.user import User
+from app.core.security import hash_password, verify_password
+
 
 def create_access_token(data: dict):
 
@@ -36,7 +38,7 @@ def registered_user(db:Session, request : RegisterRequest):
     user = User(
         name=request.name,
         email=request.email,
-        password=request.password,
+        password=hash_password(request.password),
     )
 
     db.add(user)
@@ -49,12 +51,21 @@ def registered_user(db:Session, request : RegisterRequest):
 def login_user(db:Session, email: str, password: str):
         
     user = (
-        db.query(User).filter(User.email == email ,User.password == password).first()
+        db.query(User).filter(User.email == email).first()
     )
+
+    if user is None:
+        return None
+    
+    if not verify_password(
+        password,
+        user.password
+    ):
+        return None
 
     if user:
         token = create_access_token({
-            "sub" : email
+            "sub" : user.email
         })
 
         return token    

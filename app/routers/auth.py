@@ -57,6 +57,10 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
 @router.get("/me")
 async def me(current_user = Depends(get_current_user)):
     return{
-        "user" : current_user
+        "user" : {
+            "id" : current_user.id,
+            "name" : current_user.name,
+            "email": current_user.email
+        },
     }
 

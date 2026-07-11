@@ -4,15 +4,21 @@ from app.services.auth_service import registered_user, login_user
 from app.dependencies.auth import get_current_user
 from fastapi.security import OAuth2PasswordRequestForm
 
+from app.dependencies.database import get_db
+from sqlalchemy.orm import Session 
+
 router = APIRouter(
     prefix="/auth",
     tags=["Authentication"]
 )
 
 @router.post("/register")
-async def register(request: RegisterRequest):
+async def register(
+    request: RegisterRequest, 
+    db: Session = Depends(get_db)
+    ):
 
-    user = registered_user(request)
+    user = registered_user(db, request)
 
     if user is None:
         raise HTTPException(
@@ -28,9 +34,9 @@ async def register(request: RegisterRequest):
 
 
 @router.post("/login")
-async def login(form_data: OAuth2PasswordRequestForm = Depends()):
+async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     
-    token = login_user( email=form_data.username,
+    token = login_user( db, email=form_data.username,
         password=form_data.password)
 
     if token is None:

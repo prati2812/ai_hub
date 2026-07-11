@@ -29,7 +29,11 @@ async def register(
 
     return{
         "message": "User registered successfully",
-        "user" : user,
+        "user" : {
+            "id" : user.id,
+            "name" : user.name,
+            "email": user.email
+        },
     }
 
 

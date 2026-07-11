@@ -49,7 +49,7 @@ def registered_user(db:Session, request : RegisterRequest):
 def login_user(db:Session, email: str, password: str):
         
     user = (
-        db.query(User).filter(User.email == email and User.password == password).first()
+        db.query(User).filter(User.email == email ,User.password == password).first()
     )
 
     if user:
@@ -63,16 +63,12 @@ def login_user(db:Session, email: str, password: str):
 
 
 def get_user_by_email(db:Session, email: str):
-    
-    user = (
-       db.query(User).filter(User.email == email).first()
-    )
 
-    if user:
-        return user
-
-
-    return None  
+    return (
+    db.query(User)
+    .filter(User.email == email)
+    .first()
+) 
 
            
 

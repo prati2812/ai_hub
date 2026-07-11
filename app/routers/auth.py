@@ -41,8 +41,8 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
 
     if token is None:
         raise HTTPException(
-            status_code=400,
-            detail="User is not exist"
+            status_code=401,
+            detail="Invalid email or password"
         )
     
     return {

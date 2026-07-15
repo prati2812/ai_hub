@@ -1,6 +1,7 @@
 from fastapi import FastAPI , Depends
 from app.core.config import settings
 from app.routers.auth import router as auth_router
+from app.routers.documents import router as document_router
 
 from app.database.base import Base
 from app.database.connection import engine
@@ -24,3 +25,4 @@ Base.metadata.create_all(bind=engine)
 
 
 app.include_router(auth_router)
+app.include_router(document_router)
